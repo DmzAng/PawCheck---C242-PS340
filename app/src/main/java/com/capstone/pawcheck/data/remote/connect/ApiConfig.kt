@@ -1,6 +1,6 @@
 package com.capstone.pawcheck.data.remote.connect
 
-import com.google.android.datatransport.backend.cct.BuildConfig
+import com.capstone.pawcheck.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.logging.HttpLoggingInterceptor

@@ -7,9 +7,11 @@
     import android.widget.Toast
     import androidx.fragment.app.Fragment
     import androidx.fragment.app.viewModels
+    import androidx.navigation.fragment.findNavController
     import androidx.recyclerview.widget.LinearLayoutManager
     import com.capstone.pawcheck.adapter.ArticleAdapter
     import com.capstone.pawcheck.data.di.Injection
+    import com.capstone.pawcheck.R
     import com.capstone.pawcheck.databinding.FragmentHomeBinding
     import com.capstone.pawcheck.viewmodel.HomeViewModel
     import com.capstone.pawcheck.viewmodel.ViewModelFactory
@@ -49,6 +51,10 @@
             }
 
             homeViewModel.fetchArticles()
+
+            binding.btnCamFrag.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
+            }
         }
 
         override fun onDestroyView() {
