@@ -11,12 +11,15 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityOptionsCompat
+import com.capstone.pawcheck.data.preferences.SettingPreferences
 import com.capstone.pawcheck.databinding.ActivityWelcomeBinding
 import com.capstone.pawcheck.views.authentication.authviewmodel.AuthViewModel
 import com.capstone.pawcheck.views.authentication.login.LoginActivity
 import com.capstone.pawcheck.views.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class WelcomeActivity : AppCompatActivity() {
@@ -24,12 +27,23 @@ class WelcomeActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val settingPreferences = SettingPreferences(this)
         super.onCreate(savedInstanceState)
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val isDarkMode = runBlocking {
+            settingPreferences.getThemeSetting()
+        }
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         setupView()
-        initializeWelcomeScreen()
+        playAnimation()
         observeAuthState()
         authViewModel.checkLoginStatusWithDelay()
     }
@@ -57,18 +71,6 @@ class WelcomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun initializeWelcomeScreen() {
-        playAnimation()
-        setupClickListeners()
-    }
-
-
-    private fun setupClickListeners() {
-        binding.startButton.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-    }
-
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         val options = ActivityOptionsCompat.makeCustomAnimation(
@@ -94,8 +96,7 @@ class WelcomeActivity : AppCompatActivity() {
     private fun playAnimation() {
         val alphaAnimations = listOf(
             binding.titleTextView,
-            binding.descTextView,
-            binding.startButton,
+            binding.descTextView
         ).map { view ->
             ObjectAnimator.ofFloat(view, View.ALPHA, 0f, 1f).setDuration(300)
         }

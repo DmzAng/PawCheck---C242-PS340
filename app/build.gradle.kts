@@ -115,6 +115,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
-    implementation("com.google.mediapipe:tasks-vision:0.20230731")
+    implementation(libs.tasks.vision)
 
 }

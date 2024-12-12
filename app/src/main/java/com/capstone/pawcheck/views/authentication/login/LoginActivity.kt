@@ -12,8 +12,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityOptionsCompat
 import com.capstone.pawcheck.R
+import com.capstone.pawcheck.data.preferences.SettingPreferences
 import com.capstone.pawcheck.databinding.ActivityLoginBinding
 import com.capstone.pawcheck.utils.ValidationUtils
 import com.capstone.pawcheck.views.authentication.authviewmodel.AuthViewModel
@@ -21,6 +23,7 @@ import com.capstone.pawcheck.views.authentication.authviewmodel.Resource
 import com.capstone.pawcheck.views.authentication.register.RegisterActivity
 import com.capstone.pawcheck.views.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -29,9 +32,20 @@ class LoginActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val settingPreferences = SettingPreferences(this)
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val isDarkMode = runBlocking {
+            settingPreferences.getThemeSetting()
+        }
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         setupView()
         setupOnBackPressed()

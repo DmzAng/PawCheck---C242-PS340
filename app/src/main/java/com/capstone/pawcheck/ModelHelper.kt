@@ -110,7 +110,7 @@ class ModelHelper(
         return tensorImage
     }
 
-    fun getTreatmentOptions(predictedClass: String): List<String> {
+    private fun getTreatmentOptions(predictedClass: String): List<String> {
         val treatment = mutableListOf<String>()
         when (predictedClass) {
             "Blepharitis" -> {
