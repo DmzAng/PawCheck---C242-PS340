@@ -24,6 +24,7 @@ import com.capstone.pawcheck.databinding.FragmentCameraBinding
 import com.capstone.pawcheck.views.result.ScanResultActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
+import androidx.navigation.fragment.findNavController
 
 class CameraFragment : Fragment() {
 
@@ -75,6 +76,11 @@ class CameraFragment : Fragment() {
         binding.captureButton.setOnClickListener {
             takePhoto()
         }
+
+       binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
     }
 
     override fun onResume() {

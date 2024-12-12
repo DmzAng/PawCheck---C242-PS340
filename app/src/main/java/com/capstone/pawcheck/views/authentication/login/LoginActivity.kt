@@ -10,10 +10,13 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.capstone.pawcheck.R
 import com.capstone.pawcheck.data.preferences.SettingPreferences
 import com.capstone.pawcheck.databinding.ActivityLoginBinding
@@ -34,8 +37,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val settingPreferences = SettingPreferences(this)
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
 
         val isDarkMode = runBlocking {
             settingPreferences.getThemeSetting()
@@ -52,6 +61,12 @@ class LoginActivity : AppCompatActivity() {
         setupAnimations()
         setupListeners()
         observeLoginState()
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(80, 150, 80, systemBars.bottom)
+            insets
+        }
     }
 
     private fun setupListeners() {

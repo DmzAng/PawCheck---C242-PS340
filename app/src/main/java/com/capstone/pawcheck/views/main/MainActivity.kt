@@ -2,14 +2,16 @@ package com.capstone.pawcheck.views.main
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.capstone.pawcheck.R
 import com.capstone.pawcheck.data.preferences.SettingPreferences
 import com.capstone.pawcheck.databinding.ActivityMainBinding
-import com.capstone.pawcheck.views.homepage.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val settingPreferences = SettingPreferences(this)
+        enableEdgeToEdge()
 
         val isDarkMode = runBlocking {
             settingPreferences.getThemeSetting()
@@ -49,6 +52,11 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_home)
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
